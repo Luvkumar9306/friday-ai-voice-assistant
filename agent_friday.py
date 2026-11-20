@@ -23,16 +23,18 @@ from livekit.agents.llm import mcp
 
 # Plugins
 from livekit.plugins import google as lk_google, openai as lk_openai, sarvam, silero
+from livekit.plugins.google.beta import GeminiTTS
+from edge_tts_adapter import EdgeTTS
 
 # ---------------------------------------------------------------------------
 # CONFIG
 # ---------------------------------------------------------------------------
 
 STT_PROVIDER       = "sarvam"
-LLM_PROVIDER       = "gemini"
-TTS_PROVIDER       = "openai"
+LLM_PROVIDER       = "groq"
+TTS_PROVIDER        = "edge"
 
-GEMINI_LLM_MODEL   = "gemini-2.5-flash"
+GEMINI_LLM_MODEL   = "gemini-2.0-flash"
 OPENAI_LLM_MODEL   = "gpt-4o"
 
 OPENAI_TTS_MODEL   = "tts-1"
@@ -40,7 +42,7 @@ OPENAI_TTS_VOICE   = "nova"       # "nova" has a clean, confident female tone
 TTS_SPEED           = 1.15
 
 SARVAM_TTS_LANGUAGE = "en-IN"
-SARVAM_TTS_SPEAKER  = "rahul"
+SARVAM_TTS_SPEAKER  = "meera"
 
 # MCP server running on Windows host
 MCP_SERVER_PORT = 8000
@@ -224,6 +226,13 @@ def _build_llm():
     elif LLM_PROVIDER == "gemini":
         logger.info("LLM → Google Gemini (%s)", GEMINI_LLM_MODEL)
         return lk_google.LLM(model=GEMINI_LLM_MODEL, api_key=os.getenv("GOOGLE_API_KEY"))
+    elif LLM_PROVIDER == "groq":
+        logger.info("LLM → Groq (llama-3.3-70b-versatile)")
+        return lk_openai.LLM(
+            model="llama-3.3-70b-versatile",
+            api_key=os.getenv("GROQ_API_KEY"),
+            base_url="https://api.groq.com/openai/v1",
+        )
     else:
         raise ValueError(f"Unknown LLM_PROVIDER: {LLM_PROVIDER!r}")
 
@@ -240,6 +249,12 @@ def _build_tts():
     elif TTS_PROVIDER == "openai":
         logger.info("TTS → OpenAI TTS (%s / %s)", OPENAI_TTS_MODEL, OPENAI_TTS_VOICE)
         return lk_openai.TTS(model=OPENAI_TTS_MODEL, voice=OPENAI_TTS_VOICE, speed=TTS_SPEED)
+    elif TTS_PROVIDER == "google":
+        logger.info("TTS → Google Gemini TTS")
+        return GeminiTTS(api_key=os.getenv("GOOGLE_API_KEY"), voice_name="Kore")
+    elif TTS_PROVIDER == "edge":
+        logger.info("TTS → Microsoft Edge TTS (free, unlimited)")
+        return EdgeTTS(voice="en-US-AriaNeural", rate="+10%")
     else:
         raise ValueError(f"Unknown TTS_PROVIDER: {TTS_PROVIDER!r}")
 

@@ -174,3 +174,6 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+# Bundled LiveKit server binary (too large for GitHub, users download their own)
+livekit/
