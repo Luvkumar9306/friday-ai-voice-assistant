@@ -12,7 +12,7 @@ This project is a **fork and extension** of the original [**friday-tony-stark-de
 
 [![Original Demo Video](https://img.youtube.com/vi/mMY9swqe3BI/maxresdefault.jpg)](https://www.youtube.com/watch?v=mMY9swqe3BI)
 
----
+----
 
 ## What We Changed & Added
 
@@ -42,7 +42,7 @@ A batch script that launches both the MCP Server and Voice Agent into separate t
 ### 5. Personalized Persona
 Customized FRIDAY's system prompt with a unique personality — calm, composed, occasionally dry humor. Wired trigger phrases like *"What did I miss?"* and *"Market news"* to automatically launch live visual dashboards.
 
----
+----
 
 ## How It Works
 
